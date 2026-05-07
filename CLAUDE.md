@@ -17,7 +17,16 @@ uv run python main.py
 
 ## Environnement
 
-Nécessite `OPENROUTER_API_KEY` dans un fichier `.env`. Le SDK Anthropic est configuré pour passer par OpenRouter (`base_url="https://openrouter.ai/api"`), donc les noms de modèles utilisent le préfixe `anthropic/` (ex. `anthropic/claude-haiku-4-5`).
+Copie `.env_exemple` en `.env` et remplis les clés :
+
+| Variable | Obligatoire | Rôle |
+|---|---|---|
+| `OPENROUTER_API_KEY` | Oui | Accès aux modèles Claude via OpenRouter |
+| `TAVILY_API_KEY` | Non | Recherche web réelle dans l'agent Research |
+
+Le SDK Anthropic est configuré pour passer par OpenRouter (`base_url="https://openrouter.ai/api"`), donc les noms de modèles utilisent le préfixe `anthropic/` (ex. `anthropic/claude-haiku-4-5`).
+
+Sans `TAVILY_API_KEY`, l'agent Research fonctionne mais se base uniquement sur les connaissances du modèle (pas de données web récentes).
 
 ## Architecture
 
@@ -31,7 +40,7 @@ research → draft → review → [approuvé?] → save → END
 **`AgentState`** (TypedDict dans `main.py`) est l'état partagé qui circule entre tous les nœuds. Champs clés : `topic`, `research_insights`, `draft_post`, `final_post`, `review_feedback`, `approved`, `iteration`, `trace`.
 
 **Responsabilités des nœuds :**
-- `research.py` — Extrait les angles, faits, points de vue uniques et clichés à éviter pour le sujet
+- `research.py` — Appelle d'abord Tavily pour récupérer des résultats web réels (`search_web()`), formate les résultats (`format_search_results()`), puis les passe au LLM pour en extraire angles, faits, POV unique et clichés à éviter. Tous les outputs sont en français.
 - `draft.py` — Rédige le post LinkedIn (150–250 mots, sans puces, en prose) ; intègre `review_feedback` lors des réécritures
 - `review.py` — Retourne un JSON `{approved, score, feedback, improved_post}` ; approuve automatiquement si le parsing JSON échoue pour éviter les boucles infinies
 

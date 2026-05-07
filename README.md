@@ -20,11 +20,17 @@ Recherche → Rédaction → Révision → [approuvé?] → Sauvegarde
 # Installer les dépendances
 uv sync
 
-# Ajouter ta clé API OpenRouter
-echo "OPENROUTER_API_KEY=ta_clé_ici" > .env
+# Configurer les variables d'environnement
+cp .env_exemple .env
+# puis remplir les clés dans .env
 ```
 
-Obtiens une clé API sur [openrouter.ai](https://openrouter.ai).
+| Variable | Obligatoire | Rôle |
+|---|---|---|
+| `OPENROUTER_API_KEY` | Oui | Accès aux modèles Claude via [openrouter.ai](https://openrouter.ai) |
+| `TAVILY_API_KEY` | Non | Recherche web réelle (résultats récents) via [tavily.com](https://tavily.com) |
+
+Sans `TAVILY_API_KEY`, l'agent Research se base uniquement sur les connaissances du modèle.
 
 ## Utilisation
 

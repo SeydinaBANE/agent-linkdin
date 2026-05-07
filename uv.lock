@@ -10,6 +10,7 @@ dependencies = [
     { name = "anthropic" },
     { name = "langgraph" },
     { name = "python-dotenv" },
+    { name = "requests" },
 ]
 
 [package.metadata]
@@ -17,6 +18,7 @@ requires-dist = [
     { name = "anthropic", specifier = ">=0.40.0" },
     { name = "langgraph", specifier = ">=0.2.0" },
     { name = "python-dotenv", specifier = ">=1.0.0" },
+    { name = "requests", specifier = ">=2.33.1" },
 ]
 
 [[package]]
