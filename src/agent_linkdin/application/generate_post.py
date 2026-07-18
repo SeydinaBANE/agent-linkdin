@@ -82,7 +82,7 @@ class GeneratePostUseCase:
             topic=topic,
             content=review.final_post,
             approved=review.approved,
-            iterations=final["iteration"] + 1,
+            iterations=len(final["trace"].drafts),
             generated_at=datetime.now(),
         )
         return GenerationReport(post=post, stored=stored, trace=final["trace"])
@@ -142,6 +142,8 @@ class GeneratePostUseCase:
                 approved=result.approved,
             )
         )
+        if not result.approved:
+            state["iteration"] += 1
         logger.info("[REVIEW] %s", "Approuvé" if result.approved else "Réécriture demandée")
         return state
 
@@ -149,13 +151,12 @@ class GeneratePostUseCase:
         review = state["review"]
         if review is not None and review.approved:
             return "save"
-        if state["iteration"] >= self._max_iterations:
+        if state["iteration"] > self._max_iterations:
             logger.warning(
                 "Maximum d'itérations atteint (%d) — publication du meilleur brouillon",
                 self._max_iterations,
             )
             return "save"
-        state["iteration"] += 1
         return "draft"
 
     def _save_node(self, state: PipelineState) -> PipelineState:
@@ -166,7 +167,7 @@ class GeneratePostUseCase:
             topic=state["topic"],
             content=review.final_post,
             approved=review.approved,
-            iterations=state["iteration"] + 1,
+            iterations=len(state["trace"].drafts),
             generated_at=datetime.now(),
         )
         state["stored"] = self._repository.save(post, state["trace"])
