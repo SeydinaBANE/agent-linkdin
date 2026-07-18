@@ -61,6 +61,16 @@ src/agent_linkdin/
 └── cli.py           # Composition root + point d'entrée
 ```
 
+## Documentation
+
+La documentation complète est dans [`docs/`](docs/README.md) (cadre Diataxis) :
+
+- [Tutoriel : ton premier post LinkedIn](docs/tutoriel-premier-post.md) — de l'installation au premier post généré
+- [How-to : configurer l'agent](docs/howto-configuration.md) — clés, modèles, réécritures, dossiers
+- [How-to : ajouter un adapter](docs/howto-ajouter-un-adapter.md) — brancher un autre moteur de recherche, LLM ou stockage
+- [Référence technique](docs/reference.md) — CLI, variables d'environnement, modèles, ports, formats de sortie
+- [Explication : l'architecture hexagonale](docs/explication-architecture.md) — le pourquoi du design et ses compromis
+
 ## Développement
 
 ```bash

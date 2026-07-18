@@ -44,6 +44,10 @@ Architecture hexagonale (ports & adapters) sous `src/agent_linkdin/` :
 
 **Limite de boucle :** `max_iterations` (défaut 2) dans `Settings` ; après épuisement, le meilleur brouillon est publié tel quel.
 
+## Documentation
+
+`docs/` suit le cadre Diataxis : `tutoriel-premier-post.md`, `howto-configuration.md`, `howto-ajouter-un-adapter.md`, `reference.md`, `explication-architecture.md`, indexés par `docs/README.md`. Toute modification de la surface publique (CLI, `Settings`, ports, formats de sortie) doit être répercutée dans `docs/reference.md`.
+
 ## Tests
 
 Pytest dans `tests/`, aucun appel réseau : Tavily est mocké via `monkeypatch` sur `requests.post`, les LLM via `FakeAnthropicClient` (`tests/conftest.py`), le use case via des stubs de ports. Nommage `test_<fonction>_<cas>`.
