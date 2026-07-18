@@ -11,9 +11,7 @@ class LlmDraftWriter:
         self._model = model
         self._max_tokens = max_tokens
 
-    def write(
-        self, topic: str, insights: ResearchInsights, feedback: str, iteration: int
-    ) -> Draft:
+    def write(self, topic: str, insights: ResearchInsights, feedback: str, iteration: int) -> Draft:
         user_content = f"Topic: {topic}\n\nResearch Insights:\n{insights.content}\n"
         if feedback and iteration > 0:
             user_content += (

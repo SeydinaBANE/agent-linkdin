@@ -5,6 +5,7 @@ from datetime import datetime
 from typing import TypedDict
 
 from langgraph.graph import END, StateGraph
+from langgraph.graph.state import CompiledStateGraph
 
 from agent_linkdin.domain.models import (
     Draft,
@@ -87,8 +88,8 @@ class GeneratePostUseCase:
         )
         return GenerationReport(post=post, stored=stored, trace=final["trace"])
 
-    def _build_graph(self) -> object:
-        graph: StateGraph = StateGraph(PipelineState)
+    def _build_graph(self) -> CompiledStateGraph[PipelineState, None, PipelineState, PipelineState]:
+        graph = StateGraph(PipelineState)
         graph.add_node("research", self._research_node)
         graph.add_node("draft", self._draft_node)
         graph.add_node("review", self._review_node)

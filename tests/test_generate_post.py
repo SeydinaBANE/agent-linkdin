@@ -26,9 +26,7 @@ class StubWriter:
     def __init__(self) -> None:
         self.calls: list[str] = []
 
-    def write(
-        self, topic: str, insights: ResearchInsights, feedback: str, iteration: int
-    ) -> Draft:
+    def write(self, topic: str, insights: ResearchInsights, feedback: str, iteration: int) -> Draft:
         self.calls.append(feedback)
         return Draft(content=f"brouillon v{iteration + 1}", iteration=iteration)
 

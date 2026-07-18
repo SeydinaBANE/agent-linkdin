@@ -6,7 +6,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
-    openrouter_api_key: str
+    openrouter_api_key: str = ""
     tavily_api_key: str | None = None
     openrouter_base_url: str = "https://openrouter.ai/api"
     tavily_base_url: str = "https://api.tavily.com"
@@ -20,4 +20,7 @@ class Settings(BaseSettings):
 
 
 def load_settings() -> Settings:
-    return Settings()
+    settings = Settings()
+    if not settings.openrouter_api_key:
+        raise ValueError("OPENROUTER_API_KEY manquante — renseigne-la dans .env")
+    return settings

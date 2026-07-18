@@ -36,8 +36,36 @@ Sans `TAVILY_API_KEY`, l'agent Research se base uniquement sur les connaissances
 
 ```bash
 uv run python main.py "les agents IA en production en 2025"
+# ou via le script installé
+uv run agent-linkdin "les agents IA en production en 2025" --verbose
 ```
 
 Les fichiers générés sont sauvegardés dans :
 - `output/posts/<timestamp>_<slug>.md` — le post final
 - `output/traces/<timestamp>_<slug>.json` — nombre d'itérations, durées, statut d'approbation
+
+## Architecture
+
+Architecture hexagonale (ports & adapters) sous `src/agent_linkdin/` :
+
+```
+src/agent_linkdin/
+├── domain/          # Modèles immuables + ports (Protocol) — zéro dépendance externe
+├── application/     # Use case GeneratePost orchestré par LangGraph (ports injectés)
+├── adapters/
+│   ├── search/      # Tavily (WebSearchPort)
+│   ├── llm/         # Agents research/draft/review via OpenRouter (Researcher/DraftWriter/ReviewerPort)
+│   └── persistence/ # Sauvegarde fichiers (PostRepositoryPort)
+├── config.py        # Settings pydantic-settings (.env)
+├── logging_config.py
+└── cli.py           # Composition root + point d'entrée
+```
+
+## Développement
+
+```bash
+uv run pytest         # tests (services externes mockés)
+uv run ruff check src tests main.py
+uv run ruff format src tests main.py
+uv run mypy           # typage strict
+```
